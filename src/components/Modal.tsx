@@ -25,7 +25,7 @@ function Modal({ gameResult, word, resetGame }: Props) {
             Play again
           </button>
           <a
-            href="https://github.com/Jfraser56/Jfraser56.github.io"
+            href="https://github.com/Jfraser56/Wordle-React-Game"
             target="_blank"
           >
             <button className="flex justify-center items-center transition w-28 h-10 rounded text-white bg-gray-700 hover:bg-gray-800">

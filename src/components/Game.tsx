@@ -17,8 +17,10 @@ function Game() {
   });
   const [guesses, setGuesses] = useState<string[][]>([]);
   const [guess, setGuess] = useState<string[]>([]);
+  const [guessedKeys, setGuessedKeys] = useState<string[]>([]);
 
-  const { word, setWord } = useContext(WordleContext);
+  const { word, setWord, setCorrectLettersThisGame } =
+    useContext(WordleContext);
 
   const getLocalStorage = (item: string, defValue: string) => {
     return JSON.parse(window.localStorage.getItem(item) || defValue);
@@ -39,6 +41,8 @@ function Game() {
     window.localStorage.removeItem("wordleTurn");
     window.localStorage.removeItem("gameOver");
     window.localStorage.removeItem("gameWon");
+    window.localStorage.removeItem("guessedKeys");
+    window.localStorage.removeItem("correctKeys");
   };
 
   const resetGame = () => {
@@ -46,6 +50,8 @@ function Game() {
     setTurn(0);
     setGuesses([]);
     setGuess([]);
+    setGuessedKeys([]);
+    setCorrectLettersThisGame([]);
     setModalStatus({
       isOpen: false,
       gameWon: false,
@@ -87,6 +93,17 @@ function Game() {
         setLocalStorage(guess);
         setGuess([]);
         setTurn(turn + 1);
+
+        guess.forEach((letter) => {
+          if (!guessedKeys.includes(letter)) {
+            setGuessedKeys((prev: string[]) => [...prev, letter]);
+            const guessedKeysHistory = getLocalStorage("guessedKeys", "[]");
+            window.localStorage.setItem(
+              "guessedKeys",
+              JSON.stringify([...guessedKeysHistory, letter])
+            );
+          }
+        });
 
         if (guess.join("") === word) {
           setModalStatus({ isOpen: true, gameWon: true });
@@ -145,6 +162,8 @@ function Game() {
     const wordleWord = getLocalStorage("wordleWord", "null");
     const gameOver = getLocalStorage("gameOver", "false");
     const gameWon = getLocalStorage("gameWon", "false");
+    const guessedKeysHistory = getLocalStorage("guessedKeys", "[]");
+    const correctKeysHistory = getLocalStorage("correctKeys", "[]");
 
     if (gameOver) {
       if (gameWon) {
@@ -158,6 +177,8 @@ function Game() {
       setGuesses(guessHistory);
       setTurn(turnHistory);
       setWord(wordleWord);
+      setGuessedKeys(guessedKeysHistory);
+      setCorrectLettersThisGame(correctKeysHistory);
     } else {
       fetchRandomWord();
     }
@@ -166,7 +187,11 @@ function Game() {
   return (
     <div className="min-w-[20rem] max-w-[30rem] mx-auto pt-[10vh] h-full flex flex-col justify-between items-center text-white">
       <Grid guess={guess} guesses={guesses} turn={turn} />
-      <Keyboard handleClick={handleGameInput} />
+      <Keyboard
+        handleClick={handleGameInput}
+        word={word}
+        guessedKeys={guessedKeys}
+      />
       {modalStatus.isOpen && (
         <Modal
           gameResult={modalStatus.gameWon}

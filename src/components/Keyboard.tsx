@@ -1,6 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import WordleContext from "../WordleContext";
 
-function Keyboard({ handleClick }: { handleClick: (key: string) => void }) {
+interface Props {
+  guessedKeys: string[];
+  handleClick: (key: string) => void;
+  word: string;
+}
+
+function Keyboard({ word, guessedKeys, handleClick }: Props) {
   const [row1, setRow1] = useState([
     "Q",
     "W",
@@ -36,6 +43,10 @@ function Keyboard({ handleClick }: { handleClick: (key: string) => void }) {
     "BACK",
   ]);
 
+  const { correctLettersThisGame } = useContext(WordleContext);
+
+  const wordArr = Array.from(word);
+
   return (
     <div className="w-full h-auto p-2">
       <div className="flex justify-center">
@@ -49,7 +60,13 @@ function Keyboard({ handleClick }: { handleClick: (key: string) => void }) {
                     : e.currentTarget.textContent
                 )
               }
-              className="flex justify-center items-center m-1 w-12 h-14 rounded bg-gray-400"
+              className={`flex justify-center items-center m-1 w-12 h-14 rounded bg-gray-400 cursor-pointer ${
+                correctLettersThisGame.includes(cur)
+                  ? "bg-green-600"
+                  : guessedKeys.includes(cur) && wordArr.includes(cur)
+                  ? "bg-yellow-500"
+                  : guessedKeys.includes(cur) && "bg-gray-700"
+              }`}
               key={index}
             >
               {cur}
@@ -62,7 +79,13 @@ function Keyboard({ handleClick }: { handleClick: (key: string) => void }) {
           return (
             <div
               onClick={(e) => handleClick(e.currentTarget.id)}
-              className="flex justify-center items-center m-1 w-12 h-14 rounded bg-gray-400"
+              className={`flex justify-center items-center m-1 w-12 h-14 rounded bg-gray-400 cursor-pointer ${
+                correctLettersThisGame.includes(cur)
+                  ? "bg-green-600"
+                  : guessedKeys.includes(cur) && wordArr.includes(cur)
+                  ? "bg-yellow-500"
+                  : guessedKeys.includes(cur) && "bg-gray-700"
+              }`}
               key={index}
               id={cur}
             >
@@ -76,7 +99,13 @@ function Keyboard({ handleClick }: { handleClick: (key: string) => void }) {
           return (
             <div
               onClick={(e) => handleClick(e.currentTarget.id)}
-              className="flex justify-center items-center m-1 w-full h-14 rounded bg-gray-400"
+              className={`flex justify-center items-center m-1 w-12 h-14 rounded bg-gray-400 cursor-pointer ${
+                correctLettersThisGame.includes(cur)
+                  ? "bg-green-600"
+                  : guessedKeys.includes(cur) && wordArr.includes(cur)
+                  ? "bg-yellow-500"
+                  : guessedKeys.includes(cur) && "bg-gray-700"
+              }`}
               key={index}
               id={cur}
             >

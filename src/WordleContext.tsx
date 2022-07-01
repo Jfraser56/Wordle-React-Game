@@ -12,9 +12,21 @@ export const WordleContextProvider = ({
 }: WordleContextProviderProps) => {
   const [theme, setTheme] = useState<boolean>(false);
   const [word, setWord] = useState<string>("");
+  const [correctLettersThisGame, setCorrectLettersThisGame] = useState<
+    string[]
+  >([]);
 
   return (
-    <WordleContext.Provider value={{ theme, word, setTheme, setWord }}>
+    <WordleContext.Provider
+      value={{
+        theme,
+        word,
+        correctLettersThisGame,
+        setTheme,
+        setWord,
+        setCorrectLettersThisGame,
+      }}
+    >
       {children}
     </WordleContext.Provider>
   );
