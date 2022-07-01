@@ -1,24 +1,21 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useContext } from "react";
+import WordleContext from "./WordleContext";
+import Header from "./components/Header";
+import Game from "./components/Game";
 
 function App() {
+  const { theme } = useContext(WordleContext);
+
+  console.log("render app");
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div
+      className={`relative w-screen h-screen overflow-auto ${
+        theme ? "bg-black" : "bg-white"
+      }`}
+    >
+      <Header />
+      <Game />
     </div>
   );
 }
