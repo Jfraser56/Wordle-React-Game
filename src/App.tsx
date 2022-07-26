@@ -6,10 +6,12 @@ import Game from "./components/Game";
 function App() {
   const { theme } = useContext(WordleContext);
 
-  console.log("render app");
-
   return (
-    <div className={`w-screen h-screen ${theme ? "bg-black" : "bg-white"}`}>
+    <div
+      className={`w-screen h-screen overflow-hidden ${
+        theme ? "bg-black" : "bg-white"
+      }`}
+    >
       <Header />
       <Game />
     </div>

@@ -22,18 +22,28 @@ function Game() {
   const { word, setWord, setCorrectLettersThisGame } =
     useContext(WordleContext);
 
-  const getLocalStorage = (item: string, defValue: string) => {
-    return JSON.parse(window.localStorage.getItem(item) || defValue);
-  };
+  const fetchRandomWord = async () => {
+    console.log("fetching");
+    const options = {
+      method: "GET",
+      headers: {
+        "X-RapidAPI-Key": process.env.REACT_APP_RANDOM_WORD,
+        "X-RapidAPI-Host": "random-words5.p.rapidapi.com",
+      },
+    };
 
-  const setLocalStorage = (guess: string[]) => {
-    const guessHistory = getLocalStorage("wordleGuesses", "[]");
-    let turnHistory = getLocalStorage("wordleTurn", "0");
+    const result = await fetch(
+      "https://random-words5.p.rapidapi.com/getRandom?wordLength=5",
+      //@ts-ignore
+      options
+    );
 
-    guessHistory.push(guess);
-    turnHistory += 1;
-    window.localStorage.setItem("wordleGuesses", JSON.stringify(guessHistory));
-    window.localStorage.setItem("wordleTurn", JSON.stringify(turnHistory));
+    const res = await result.text();
+    await setWord(res.toUpperCase());
+    window.localStorage.setItem(
+      "wordleWord",
+      JSON.stringify(res.toUpperCase())
+    );
   };
 
   const clearLocalStorage = () => {
@@ -59,42 +69,35 @@ function Game() {
     fetchRandomWord();
   };
 
-  const fetchRandomWord = async () => {
-    console.log("fetching");
-    const options = {
-      method: "GET",
-      headers: {
-        "X-RapidAPI-Key": process.env.REACT_APP_RANDOM_WORD,
-        "X-RapidAPI-Host": "random-words5.p.rapidapi.com",
-      },
-    };
+  const getLocalStorage = (item: string, defValue: string) => {
+    return JSON.parse(window.localStorage.getItem(item) || defValue);
+  };
 
-    const result = await fetch(
-      "https://random-words5.p.rapidapi.com/getRandom?wordLength=5",
-      //@ts-ignore
-      options
-    );
+  const updateGuessAndTurnHistory = (guess: string[]) => {
+    //On valid guess, update user guess history and increment their turn +1
+    const guessHistory = getLocalStorage("wordleGuesses", "[]");
+    let turnHistory = getLocalStorage("wordleTurn", "0");
 
-    const res = await result.text();
-    await setWord(res.toUpperCase());
-    window.localStorage.setItem(
-      "wordleWord",
-      JSON.stringify(res.toUpperCase())
-    );
+    guessHistory.push(guess);
+    turnHistory += 1;
+    window.localStorage.setItem("wordleGuesses", JSON.stringify(guessHistory));
+    window.localStorage.setItem("wordleTurn", JSON.stringify(turnHistory));
   };
 
   const validateGuess = async (guessedWord: string) => {
+    //Checks if word is in the english dictionary
     const response = await fetch(
       `https://api.dictionaryapi.dev/api/v2/entries/en/${guessedWord}`
     );
     try {
       if (response.ok) {
         setGuesses((prev) => [...prev, guess]);
-        setLocalStorage(guess);
+        updateGuessAndTurnHistory(guess);
         setGuess([]);
         setTurn(turn + 1);
 
         guess.forEach((letter) => {
+          //If guessedKeys does not already include a letter, push it onto guessedKeys state and update local storage
           if (!guessedKeys.includes(letter)) {
             setGuessedKeys((prev: string[]) => [...prev, letter]);
             const guessedKeysHistory = getLocalStorage("guessedKeys", "[]");
@@ -128,6 +131,7 @@ function Game() {
     const isBackSpace = key === "Backspace" || key === "BACK";
     const isEnter = key === "Enter" || key === "ENTER";
 
+    //If the game is not over, then apply user key presses
     if (!modalStatus.isOpen) {
       if (isChar && !isGuessComplete) {
         setGuess((prev) => [...prev, key.toUpperCase()]);
@@ -143,6 +147,7 @@ function Game() {
     }
   };
 
+  //
   useEffect(() => {
     const handleKeyDown = ({ key }: { key: string }) => {
       handleGameInput(key);
@@ -173,6 +178,7 @@ function Game() {
       }
     }
 
+    //If game is not finished, fill state with local storage data
     if (wordleWord !== null) {
       setGuesses(guessHistory);
       setTurn(turnHistory);
@@ -185,7 +191,7 @@ function Game() {
   }, []);
 
   return (
-    <div className="min-w-[20rem] max-w-[30rem] mx-auto game-height flex flex-col justify-evenly items-center text-white">
+    <div className="min-w-[20rem] max-w-[30rem] mx-auto game-height pb-16 sm:pb-0 flex flex-col justify-evenly items-center text-white">
       <Grid guess={guess} guesses={guesses} turn={turn} />
       <Keyboard
         handleClick={handleGameInput}

@@ -48,7 +48,7 @@ function Keyboard({ word, guessedKeys, handleClick }: Props) {
   const wordArr = Array.from(word);
 
   return (
-    <div className="w-full h-auto p-2">
+    <div className="w-full px-3 sm:px-0">
       <div className="flex justify-center">
         {row1.map((cur, index) => {
           return (

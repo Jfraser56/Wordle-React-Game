@@ -56,7 +56,7 @@ function GridRow({ guesses, turn }: Props) {
       {wordArr.map((letter, index) => (
         <div
           key={index}
-          className={`w-14 h-14 sm:w-16 sm:h-16 m-1 bg-gray-500/60 flex justify-center items-center text-4xl  ${
+          className={`w-12 h-12 sm:w-16 sm:h-16 m-1 bg-gray-500/60 flex justify-center items-center text-4xl  ${
             guesses[turn]
               ? word[index] === guesses[turn][index]
                 ? "bg-green-600/100"
