@@ -26,7 +26,7 @@ function Header() {
 
   return (
     <div
-      className={`fixed top-0 w-full flex justify-between items-center py-3 px-10 border-b ${
+      className={`flex justify-between items-center h-16 px-10 border-b ${
         theme ? "bg-black border-gray-500" : "bg-white border-gray-300"
       }`}
     >

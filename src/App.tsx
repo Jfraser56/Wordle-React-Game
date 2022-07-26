@@ -9,11 +9,7 @@ function App() {
   console.log("render app");
 
   return (
-    <div
-      className={`relative w-screen h-screen overflow-auto py-[10vh] ${
-        theme ? "bg-black" : "bg-white"
-      }`}
-    >
+    <div className={`w-screen h-screen ${theme ? "bg-black" : "bg-white"}`}>
       <Header />
       <Game />
     </div>

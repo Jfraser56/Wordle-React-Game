@@ -185,7 +185,7 @@ function Game() {
   }, []);
 
   return (
-    <div className="min-w-[20rem] max-w-[30rem] mx-auto h-full flex flex-col justify-between items-center text-white">
+    <div className="min-w-[20rem] max-w-[30rem] mx-auto game-height flex flex-col justify-evenly items-center text-white">
       <Grid guess={guess} guesses={guesses} turn={turn} />
       <Keyboard
         handleClick={handleGameInput}
