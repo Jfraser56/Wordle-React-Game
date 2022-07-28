@@ -114,7 +114,7 @@ function Game() {
           window.localStorage.setItem("gameWon", JSON.stringify(true));
         } else if (turn === 5) {
           setModalStatus({ isOpen: true, gameWon: false });
-          window.localStorage.setItem("gameOver", JSON.stringify(false));
+          window.localStorage.setItem("gameOver", JSON.stringify(true));
           window.localStorage.setItem("gameWon", JSON.stringify(false));
         }
       } else {
@@ -174,7 +174,7 @@ function Game() {
       if (gameWon) {
         setModalStatus({ isOpen: true, gameWon: true });
       } else {
-        setModalStatus({ isOpen: true, gameWon: true });
+        setModalStatus({ isOpen: true, gameWon: false });
       }
     }
 
