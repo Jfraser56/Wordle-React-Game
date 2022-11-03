@@ -6,7 +6,7 @@
 You have 6 guesses to guess the 5 letter word. Each guess will provide the user feedback on which letters in their guess are included in the answer (yellow), in the right location (green), or not included at all (dark grey).
 
 ### Features
-* Uses ReactJS's re-rendering ability to provide the user with realtime feedback on their guess when they press Enter.
+* Uses ReactJS's state rendering properties to provide the user with realtime feedback on their guess when they press Enter.
 * App is able to pull a random 5 letter word from the english dictionary using an external API at the start of each game.
 * App checks the users guess by submitting another GET request to an external API, and can validate the guess depending on the status of the returned request. 
 * Uses local storage - If the user closes their browser, and revisits the app at later time, their progress will be saved
