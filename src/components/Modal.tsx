@@ -35,7 +35,7 @@ function Modal({ gameResult, word, resetGame }: Props) {
         </div>
         <a
           className="text-sm underline"
-          href="https://jfraser56.github.io/"
+          href="https://www.johnfraser.dev/"
           target="_blank"
         >
           by John Fraser
